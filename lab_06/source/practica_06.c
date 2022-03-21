@@ -105,9 +105,12 @@ void producer(int start, int end){
 			
 		}
 	}
-	semwait(semarr,S_EXMUT);//wait if critic section is on use
+	semwait(semarr,S_EXMUT);//wait CS
 	buffer->pended += 1;
-	semsignal(semarr,S_EXMUT);//signal critical section free
+	if(buffer->pended == NUM_PRODUCERS)
+		semsignal (semarr,B_EMPTY);
+	
+	semsignal(semarr,S_EXMUT);//signal CS
 	
 	//printf("Fin productor\n");
 	exit(0);
@@ -140,19 +143,20 @@ void consumer(){
 		semwait (semarr,B_EMPTY);//wait if empty buffer
 		semwait(semarr,S_EXMUT);//wait if critic section is on use
 		
-		val = buffer->arr[buffer->read];
-		buffer->read = (buffer->read + 1) % BUFFER_SIZE;
-		
-		if(buffer-> read == buffer-> add)
-			end = buffer->pended == NUM_PRODUCERS;
-		
-		//printf("\t\t%d, %d, %d\n",val, end, buffer->pended);
+		if(buffer->read == buffer->add && buffer->pended == NUM_PRODUCERS)
+			end = 1;
+		else{
+			val = buffer->arr[buffer->read];
+			buffer->read = (buffer->read + 1) % BUFFER_SIZE;
+			//printf("\t\t%d, %d, %d\n",val, end, buffer->pended);
+		}
 		
 		semsignal(semarr,S_EXMUT);
 		semsignal(semarr,B_FULL);
-		
-		addNode(&root,val);
+		if(!end)
+			addNode(&root,val);
 	}
+	//printf("||%d\n",root.next == NULL);
 	print(root.next);
 	delete(root.next);
 	//printf("\t\t\tconsumer\n");

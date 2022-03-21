@@ -6,7 +6,6 @@ struct Node{
 	struct Node* next;
 };
 
-
 void addNode(struct Node* root, int val){
 	struct Node* cur = root->next;
 	struct Node* prev = root;
