@@ -3,7 +3,7 @@ S=source
 I=include
 
 semaphore:
-	gcc -o practica_06_sema $S/practica_06.c -lm -I$I
+	gcc -o lab_06_sema $S/lab_06_sema.c -lm -I$I
 
 clean:
-	rm practica_06_sema
+	rm lab_06_sema

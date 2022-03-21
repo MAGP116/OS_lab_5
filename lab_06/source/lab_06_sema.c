@@ -94,7 +94,7 @@ int main(int argc, char *argv[]){
 
 void producer(int start, int end){
 	
-	if(start == 2){
+	if(start == 2 && start < end){
 		add(2);
 		start += 1;
 	}
