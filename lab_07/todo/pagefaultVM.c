@@ -50,6 +50,7 @@ int pagefault(char *vaddress)
         readblock(buffer, ptbr[pag_del_proceso].framenumber);
 
         // Libera el frame virtual
+		systemframetable[ptbr[pag_del_proceso].framenumber].assigned = 0;
         ptbr[pag_del_proceso].framenumber = -1;
     }
 
