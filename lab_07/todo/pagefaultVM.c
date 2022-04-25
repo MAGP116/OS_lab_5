@@ -130,20 +130,13 @@ int getfifo(){
     fifo = (fifo + 1)%ptlr;
     return t;
 }
-
 int searchvirtualframe(){
-    short a = 0;
-    int i;
-    for( i = 0; i < ptlr; i++){
-        if(ptbr[i].framenumber >= systemframetablesize){
-            a += 1<<(ptbr[i].framenumber - systemframetablesize - (RESIDENTSETSIZE * idproc));
+    for(int i=systemframetablesize;i<systemframetablesize*2;i++)
+        if(!systemframetable[i].assigned)
+        {
+            systemframetable[i].assigned=1;
+            return i;
         }
-    }
-    for(i = 0; i < RESIDENTSETSIZE; i++){
-        if(!(1 & (a>>i))){
-            return systemframetablesize + (RESIDENTSETSIZE * idproc) + i;
-        }
-    }
     return -1;
 }
 
